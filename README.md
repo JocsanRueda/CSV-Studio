@@ -4,7 +4,7 @@ Aplicación web estática para limpiar varios archivos CSV directamente en el na
 
 ## Funciones
 - Elimina columnas cuyo encabezado comienza con `px`.
-- Elimina opcionalmente `pyGUID` sin sensibilidad a mayúsculas/minúsculas.
+- Elimina opcionalmente `pyGUID`, `pyLabel` y `pyBoolFlag` sin sensibilidad a mayúsculas/minúsculas.
 - Conserva el delimitador y el salto de línea detectados.
 - Elimina timestamps como `20260812T215952.873 GMT` del nombre de salida.
 - Descarga un CSV o un ZIP cuando se procesan varios archivos.
