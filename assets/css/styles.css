@@ -6,4 +6,5 @@
 .animate-rise { animation:rise .25s ease-out both; }
 #cursorGlow { background:radial-gradient(540px circle at var(--mouse-x,50%) var(--mouse-y,35%),rgba(7,107,201,.13),rgba(82,182,232,.055) 40%,transparent 72%); will-change:background; }
 .dark #cursorGlow { background:radial-gradient(580px circle at var(--mouse-x,50%) var(--mouse-y,35%),rgba(82,182,232,.16),rgba(7,107,201,.09) 42%,transparent 72%); }
-@media (prefers-reduced-motion:reduce){#cursorGlow{display:none}.animate-rise{animation:none}}
+@media (prefers-reduced-motion:reduce){#cursorGlow{display:none}.animate-rise{animation:none}.file-progress-bar{transition:none!important}}
+.file-progress-bar { position:absolute; inset:0; z-index:0; width:0; border-radius:.5rem; pointer-events:none; }
