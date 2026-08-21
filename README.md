@@ -13,20 +13,6 @@ Aplicación web estática para limpiar varios archivos CSV directamente en el na
 ## Ejecutar localmente
 Los módulos ES requieren un servidor local:
 
-```bash
-python3 -m http.server 8080
-```
-
-Abre `http://localhost:8080`.
-
-## Publicar en GitHub Pages
-1. Sube todo el contenido de esta carpeta a la rama `main`.
-2. En GitHub abre **Settings > Pages**.
-3. En **Build and deployment**, selecciona **Deploy from a branch**.
-4. Selecciona `main` y `/ (root)`.
-5. Guarda y espera la publicación.
-
-> GitHub Pages público no restringe por sí mismo el acceso a usuarios de tu organización. Si el repositorio o la aplicación debe ser estrictamente interna, valida la política de GitHub Enterprise de tu organización o utiliza Azure Static Web Apps con Microsoft Entra ID.
 
 ## Estructura
 - `index.html`: estructura de la interfaz.
