@@ -1,10 +1,6 @@
-import type { Texts } from '../config';
+import { TEXTS } from '../config';
 
-interface EmptyStateProps {
-  texts: Texts;
-}
-
-export function EmptyState({ texts }: EmptyStateProps) {
+export function EmptyState() {
   return (
     <div className="grid min-h-64 place-items-center text-center">
       <div>
@@ -12,7 +8,7 @@ export function EmptyState({ texts }: EmptyStateProps) {
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
           <path d="M14 2v6h6" />
         </svg>
-        <p className="mt-3 text-sm font-semibold text-slate-500">{texts.emptyState}</p>
+        <p className="mt-3 text-sm font-semibold text-slate-500">{TEXTS.emptyState}</p>
       </div>
     </div>
   );

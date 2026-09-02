@@ -1,12 +1,11 @@
 import { useState, type ChangeEvent, type DragEvent } from 'react';
-import type { Texts } from '../config';
+import { TEXTS } from '../config';
 
 interface DropzoneProps {
-  texts: Texts;
   onFilesSelected: (files: File[]) => void;
 }
 
-export function Dropzone({ texts, onFilesSelected }: DropzoneProps) {
+export function Dropzone({ onFilesSelected }: DropzoneProps) {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -38,8 +37,8 @@ export function Dropzone({ texts, onFilesSelected }: DropzoneProps) {
           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 16V4m0 0L7 9m5-5 5 5M5 20h14" />
         </svg>
       </div>
-      <span className="font-bold">{texts.dropTitle}</span>
-      <span className="mt-1 text-sm text-slate-500 dark:text-slate-400">{texts.dropSubtitle}</span>
+      <span className="font-bold">{TEXTS.dropTitle}</span>
+      <span className="mt-1 text-sm text-slate-500 dark:text-slate-400">{TEXTS.dropSubtitle}</span>
       <input id="fileInput" className="sr-only" type="file" accept=".csv,text/csv" multiple onChange={handleChange} />
     </label>
   );

@@ -33,11 +33,10 @@ function App() {
       <BackgroundEffects glowRef={glowRef} />
 
       <main className="relative mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
-        <Header texts={TEXTS} theme={theme} onToggleTheme={toggleTheme} />
+        <Header theme={theme} onToggleTheme={toggleTheme} />
 
         <section className="grid gap-6 lg:grid-cols-[1.12fr_.88fr]">
           <CleanerPanel
-            texts={TEXTS}
             settings={SETTINGS}
             optionalColumns={optionalColumns}
             hasFiles={files.length > 0}
@@ -51,7 +50,6 @@ function App() {
           />
 
           <FilesPanel
-            texts={TEXTS}
             files={files}
             progress={progress}
             summary={summary}

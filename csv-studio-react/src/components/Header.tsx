@@ -1,12 +1,11 @@
-import type { Texts } from '../config';
+import { TEXTS } from '../config';
 
 interface HeaderProps {
-  texts: Texts;
   theme: 'light' | 'dark';
   onToggleTheme: () => void;
 }
 
-export function Header({ texts, theme, onToggleTheme }: HeaderProps) {
+export function Header({ theme, onToggleTheme }: HeaderProps) {
   return (
     <header className="mb-6 flex items-center justify-between gap-4">
       <div className="flex items-center gap-3">
@@ -20,14 +19,14 @@ export function Header({ texts, theme, onToggleTheme }: HeaderProps) {
           </svg>
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[.2em] text-sky-700 dark:text-sky-400">{texts.eyebrow}</p>
-          <h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">{texts.appTitle}</h1>
+          <p className="text-xs font-bold uppercase tracking-[.2em] text-sky-700 dark:text-sky-400">{TEXTS.eyebrow}</p>
+          <h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">{TEXTS.appTitle}</h1>
         </div>
       </div>
       <button
         type="button"
         onClick={onToggleTheme}
-        aria-label={texts.themeToggle}
+        aria-label={TEXTS.themeToggle}
         className="rounded-lg border border-slate-200 bg-white p-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
       >
         {theme === 'dark' ? (
