@@ -19,15 +19,15 @@ export function Header({ theme, onToggleTheme }: HeaderProps) {
           </svg>
         </div>
         <div>
-          <p className="text-xs font-bold uppercase tracking-[.2em] text-sky-700 dark:text-sky-400">{TEXTS.eyebrow}</p>
-          <h1 className="text-xl font-extrabold tracking-tight sm:text-2xl">{TEXTS.appTitle}</h1>
+          <p className="text-xs font-medium uppercase tracking-widest text-sky-600 dark:text-sky-400">{TEXTS.eyebrow}</p>
+          <h1 className="text-xl font-semibold tracking-tight text-zinc-900 sm:text-2xl dark:text-zinc-50">{TEXTS.appTitle}</h1>
         </div>
       </div>
       <button
         type="button"
         onClick={onToggleTheme}
         aria-label={TEXTS.themeToggle}
-        className="rounded-lg border border-slate-200 bg-white p-3 text-slate-600 shadow-sm transition hover:-translate-y-0.5 hover:text-sky-600 focus:outline-none focus:ring-4 focus:ring-sky-500/20 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300"
+        className="rounded-lg border border-zinc-200 bg-white p-3 text-zinc-600 shadow-sm transition hover:bg-zinc-50 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500/30 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
       >
         {theme === 'dark' ? (
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5">

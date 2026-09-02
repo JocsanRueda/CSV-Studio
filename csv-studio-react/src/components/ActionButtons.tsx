@@ -25,7 +25,7 @@ export function ActionButtons({ hasFiles, isProcessing, hasResult, onClean, onCl
           type="button"
           disabled={!hasFiles}
           onClick={onClear}
-          className="rounded-lg border border-slate-200 bg-white px-5 py-3.5 font-bold text-slate-700 transition hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-40 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:bg-slate-700"
+          className="rounded-lg border border-zinc-200 bg-white px-5 py-3.5 font-medium text-zinc-700 transition hover:bg-zinc-50 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-200 dark:hover:bg-zinc-800"
         >
           {TEXTS.clearButton}
         </button>
@@ -35,7 +35,7 @@ export function ActionButtons({ hasFiles, isProcessing, hasResult, onClean, onCl
         <button
           type="button"
           onClick={onDownload}
-          className="mt-3 w-full rounded-lg border border-sky-500 bg-sky-50 px-5 py-3.5 font-bold text-sky-700 transition hover:bg-sky-100 dark:bg-sky-950/40 dark:text-sky-300 dark:hover:bg-sky-900/60"
+          className="mt-3 w-full rounded-lg border border-sky-200 bg-sky-50 px-5 py-3.5 font-medium text-sky-700 transition hover:bg-sky-100 dark:border-sky-900 dark:bg-sky-950/40 dark:text-sky-300 dark:hover:bg-sky-900/60"
         >
           {TEXTS.downloadButton}
         </button>

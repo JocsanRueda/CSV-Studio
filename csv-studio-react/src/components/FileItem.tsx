@@ -10,7 +10,7 @@ interface FileItemProps {
 
 export function FileItem({ file, index, progress, onRemove }: FileItemProps) {
   return (
-    <article className="animate-rise relative overflow-hidden flex items-center gap-3 rounded-lg border border-slate-200 p-3 dark:border-slate-700">
+    <article className="animate-rise relative overflow-hidden flex items-center gap-3 rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
       <div
         className="file-progress-bar absolute inset-0 z-0 bg-sky-500/10 dark:bg-sky-400/10"
         style={{
@@ -20,18 +20,18 @@ export function FileItem({ file, index, progress, onRemove }: FileItemProps) {
         }}
         aria-hidden="true"
       />
-      <div className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-slate-200 text-xs font-black text-slate-800 dark:bg-slate-800 dark:text-slate-200">
+      <div className="relative z-10 grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-zinc-100 text-[11px] font-semibold text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300">
         {TEXTS.csvBadge}
       </div>
       <div className="relative z-10 min-w-0 flex-1">
-        <p className="truncate text-sm font-bold" title={file.name}>{file.name}</p>
-        <p className="text-xs text-slate-500">{formatBytes(file.size, TEXTS)}</p>
+        <p className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100" title={file.name}>{file.name}</p>
+        <p className="text-xs text-zinc-500">{formatBytes(file.size, TEXTS)}</p>
       </div>
       <button
         type="button"
         onClick={() => onRemove(index)}
         aria-label={`${TEXTS.removeFile} ${file.name}`}
-        className="relative z-10 rounded-lg p-2 text-slate-400 hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-sky-950"
+        className="relative z-10 rounded-full p-2 text-zinc-400 hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-sky-950"
       >
         ✕
       </button>

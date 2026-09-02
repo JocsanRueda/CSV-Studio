@@ -29,7 +29,7 @@ function App() {
   } = useCsvCleaner()
 
   return (
-    <div className="relative min-h-screen overflow-x-hidden bg-[#eef3f7] text-slate-950 antialiased selection:bg-sky-200 dark:bg-[#101820] dark:text-slate-100 dark:selection:bg-sky-900">
+    <div className="relative min-h-screen overflow-x-hidden bg-zinc-50 text-zinc-950 antialiased selection:bg-sky-200 dark:bg-zinc-950 dark:text-zinc-100 dark:selection:bg-sky-900">
       <BackgroundEffects glowRef={glowRef} />
 
       <main className="relative mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
@@ -57,7 +57,7 @@ function App() {
           />
         </section>
 
-        <footer className="mt-7 text-center text-xs leading-5 text-slate-500">{TEXTS.footer}</footer>
+        <footer className="mt-7 text-center text-xs leading-5 text-zinc-500">{TEXTS.footer}</footer>
       </main>
     </div>
   )
