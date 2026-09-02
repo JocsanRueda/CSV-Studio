@@ -21,6 +21,7 @@ function parseCsvText(raw: string): ParseResult<string[]> {
   return parsed;
 }
 
+// NFKC + lowercase so headers with different Unicode forms or casing still match (e.g. "pyGUID" vs "PYGUID").
 const normalizeHeader = (value: unknown): string =>
   String(value ?? '')
     .replace(/^\uFEFF/, '')
@@ -31,6 +32,7 @@ const normalizeHeader = (value: unknown): string =>
 const newlineOf = (text: string): string =>
   text.includes('\r\n') ? '\r\n' : text.includes('\r') ? '\r' : '\n';
 
+// Strips a trailing PEGA export timestamp like "_20260812T215952.873 GMT" from the file name.
 export const cleanOutputName = (name: string): string => {
   const base = name.replace(/\.csv$/i, '');
   const cleaned = base

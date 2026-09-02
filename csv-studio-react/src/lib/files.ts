@@ -3,6 +3,7 @@ import { TEXTS } from '../config';
 const KB = 1024;
 const MB = KB * 1024;
 
+// Heuristic identity for a File (no stable id exists): good enough to dedupe re-selected/dropped files.
 export const fileKey = (file: File): string => `${file.name}|${file.size}|${file.lastModified}`;
 
 export const isCsv = (file: File): boolean =>

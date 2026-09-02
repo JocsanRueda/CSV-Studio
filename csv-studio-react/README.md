@@ -1,6 +1,64 @@
-# React + TypeScript + Vite
+# CSV Studio (React + TypeScript)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Migración en progreso de CSV Studio (vanilla JS + CDN) a React 19 + TypeScript + Vite + Tailwind CSS v4, manteniendo el 100% de la funcionalidad original.
+
+## Estado actual
+
+- ✅ Lógica de negocio migrada y tipada: limpieza de CSV, manejo de archivos, tema, efecto de cursor.
+- ✅ UI componentizada (sin componentes monolíticos, sin prop-drilling de textos).
+- ✅ Dependencias reales: `papaparse` y `jszip` vía npm (nada de `<script>` por CDN).
+- ✅ Diseño modernizado (paleta neutra, radios y sombras estilo shadcn) conservando los efectos de gradiente originales (glow del cursor, línea superior, botón principal).
+- ✅ `strict: true` habilitado en TypeScript.
+- ⬜ Pendiente: pruebas automatizadas (Vitest) y reemplazo definitivo del proyecto vanilla en la raíz del repo.
+
+## Funciones
+
+- Elimina columnas cuyo encabezado comienza con `px`.
+- Elimina opcionalmente `pyGUID`, `pyLabel` y `pyBoolFlag` (activables/desactivables desde la UI).
+- Conserva el delimitador y el salto de línea detectados en el CSV original.
+- Elimina timestamps tipo `20260812T215952.873 GMT` del nombre de salida.
+- Descarga un CSV único o un ZIP cuando se procesan varios archivos.
+- Todo el procesamiento ocurre en el navegador; no se envían archivos a un servidor.
+
+## Requisitos
+
+- Node.js 18+
+- [pnpm](https://pnpm.io/) (gestor de paquetes usado en este proyecto)
+
+## Comandos
+
+```bash
+pnpm install       # instalar dependencias
+pnpm dev           # servidor de desarrollo con HMR
+pnpm build         # type-check (tsc -b) + build de producción
+pnpm preview       # previsualizar el build de producción
+pnpm lint          # ESLint
+```
+
+## Estructura
+
+```
+src/
+  config.ts               # textos (TEXTS) y ajustes (SETTINGS), tipados
+  lib/
+    csv.ts                 # parseo y limpieza de CSV (Papa Parse)
+    files.ts                # dedupe, formato de bytes, descarga de blobs
+  hooks/
+    useCsvCleaner.ts        # estado y flujo principal (archivos, progreso, resultado)
+    useTheme.ts              # tema claro/oscuro persistido en localStorage
+    useCursorGlow.ts         # efecto de glow que sigue al cursor
+  components/
+    Header.tsx, HeroIntro.tsx, Dropzone.tsx, OptionalColumnsPanel.tsx,
+    ActionButtons.tsx, FileList.tsx, FileItem.tsx, EmptyState.tsx,
+    SummaryBox.tsx, CleanerPanel.tsx, FilesPanel.tsx, BackgroundEffects.tsx
+  App.tsx                  # raíz de composición
+```
+
+`TEXTS` y `SETTINGS` se importan directamente donde se necesitan (no se pasan como props) porque son constantes estáticas sin selector de idioma dinámico.
+
+---
+
+## Notas de la plantilla base (Vite + React + TS)
 
 Currently, two official plugins are available:
 

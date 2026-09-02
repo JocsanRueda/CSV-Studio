@@ -17,6 +17,7 @@ export function useCursorGlow(ref: RefObject<HTMLElement | null>): void {
     };
 
     const animate = () => {
+      // Exponential easing (lerp) towards the pointer position for a trailing/inertia feel.
       x += (targetX - x) * 0.09;
       y += (targetY - y) * 0.09;
       glow.style.setProperty('--mouse-x', `${x}px`);
