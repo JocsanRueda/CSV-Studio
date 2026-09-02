@@ -1,4 +1,7 @@
-import type { Texts } from '../config';
+import { TEXTS } from '../config';
+
+const KB = 1024;
+const MB = KB * 1024;
 
 export const fileKey = (file: File): string => `${file.name}|${file.size}|${file.lastModified}`;
 
@@ -16,10 +19,10 @@ export function mergeUniqueCsv(current: File[], incoming: File[]): File[] {
   return [...current, ...unique];
 }
 
-export function formatBytes(bytes: number, texts: Pick<Texts, 'bytes' | 'kilobytes' | 'megabytes'>): string {
-  if (bytes < 1024) return `${bytes} ${texts.bytes}`;
-  if (bytes < 1048576) return `${(bytes / 1024).toFixed(1)} ${texts.kilobytes}`;
-  return `${(bytes / 1048576).toFixed(1)} ${texts.megabytes}`;
+export function formatBytes(bytes: number): string {
+  if (bytes < KB) return `${bytes} ${TEXTS.bytes}`;
+  if (bytes < MB) return `${(bytes / KB).toFixed(1)} ${TEXTS.kilobytes}`;
+  return `${(bytes / MB).toFixed(1)} ${TEXTS.megabytes}`;
 }
 
 export function downloadBlob(blob: Blob, name: string): void {

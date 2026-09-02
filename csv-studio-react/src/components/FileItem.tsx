@@ -25,7 +25,7 @@ export function FileItem({ file, index, progress, onRemove }: FileItemProps) {
       </div>
       <div className="relative z-10 min-w-0 flex-1">
         <p className="truncate text-sm font-medium text-zinc-900 dark:text-zinc-100" title={file.name}>{file.name}</p>
-        <p className="text-xs text-zinc-500">{formatBytes(file.size, TEXTS)}</p>
+        <p className="text-xs text-zinc-500">{formatBytes(file.size)}</p>
       </div>
       <button
         type="button"

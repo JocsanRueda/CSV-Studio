@@ -11,21 +11,15 @@ export interface CleanResult {
   name: string;
 }
 
-const parseFile = (file: File) =>
-  new Promise<ParseResult<string[]>>((resolve, reject) => {
-    Papa.parse<string[]>(file, {
-      skipEmptyLines: false,
-      complete: (result) => {
-        const quoteError = result.errors.find((error) => error.type === 'Quotes');
-        if (quoteError) {
-          reject(new Error(quoteError.message));
-          return;
-        }
-        resolve(result);
-      },
-      error: reject,
-    });
-  });
+// Papa.parse is synchronous for string input, so no need to read the file twice via a File-based parse.
+function parseCsvText(raw: string): ParseResult<string[]> {
+  const parsed = Papa.parse<string[]>(raw, { skipEmptyLines: false });
+  const quoteError = parsed.errors.find((error) => error.type === 'Quotes');
+  if (quoteError) {
+    throw new Error(quoteError.message);
+  }
+  return parsed;
+}
 
 const normalizeHeader = (value: unknown): string =>
   String(value ?? '')
@@ -45,18 +39,12 @@ export const cleanOutputName = (name: string): string => {
   return `${cleaned || base}.csv`;
 };
 
-export async function cleanCsv(
-  file: File,
-  { removeOptionalColumns = {} }: CleanOptions = {},
-): Promise<CleanResult> {
-  const raw = await file.text();
-  const parsed = await parseFile(file);
-  const rows = parsed.data;
+interface KeptColumn {
+  header: string;
+  index: number;
+}
 
-  if (!rows.length || !Array.isArray(rows[0])) {
-    throw new Error(TEXTS.invalidCsv);
-  }
-
+function resolveColumnsToKeep(header: string[], removeOptionalColumns: Record<string, boolean>): KeptColumn[] {
   const prefix = normalizeHeader(SETTINGS.systemPrefix);
   const optionalSet = new Set(
     SETTINGS.optionalExactColumns
@@ -64,14 +52,29 @@ export async function cleanCsv(
       .map(normalizeHeader),
   );
 
-  const keep = rows[0]
-    .map((header, index) => ({ header: String(header ?? '').replace(/^\uFEFF/, ''), index }))
-    .filter(({ header }) => {
-      const normalized = normalizeHeader(header);
+  return header
+    .map((rawHeader, index) => ({ header: String(rawHeader ?? '').replace(/^\uFEFF/, ''), index }))
+    .filter(({ header: value }) => {
+      const normalized = normalizeHeader(value);
       return !normalized.startsWith(prefix) && !optionalSet.has(normalized);
     });
+}
 
+export async function cleanCsv(
+  file: File,
+  { removeOptionalColumns = {} }: CleanOptions = {},
+): Promise<CleanResult> {
+  const raw = await file.text();
+  const parsed = parseCsvText(raw);
+  const rows = parsed.data;
+
+  if (!rows.length || !Array.isArray(rows[0])) {
+    throw new Error(TEXTS.invalidCsv);
+  }
+
+  const keep = resolveColumnsToKeep(rows[0], removeOptionalColumns);
   const removed = rows[0].length - keep.length;
+
   const cleanedRows = rows.map((row, rowIndex) =>
     keep.map(({ header, index }) => (rowIndex === 0 ? header : (row[index] ?? ''))),
   );
@@ -84,3 +87,4 @@ export async function cleanCsv(
 
   return { csv, removed, name: cleanOutputName(file.name) };
 }
+

@@ -25,8 +25,18 @@ export interface Summary {
   errors: string[];
 }
 
+const PROGRESS_STARTED = 10;
+const PROGRESS_PARSED = 80;
+const PROGRESS_DONE = 100;
+// Brief pause so the progress bar animation is visible even on fast/local files.
+const FEEDBACK_DELAY_MS = 120;
+
 const defaultOptionalColumns = (): OptionalColumns =>
   Object.fromEntries(SETTINGS.optionalExactColumns.map((column) => [column, true]));
+
+const getErrorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
+
+const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export function useCsvCleaner() {
   const [files, setFiles] = useState<File[]>([]);
@@ -35,6 +45,10 @@ export function useCsvCleaner() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [optionalColumns, setOptionalColumns] = useState<OptionalColumns>(defaultOptionalColumns);
+
+  const setFileProgress = useCallback((key: string, value: number) => {
+    setProgress((current) => ({ ...current, [key]: value }));
+  }, []);
 
   const addFiles = useCallback((incoming: File[]) => {
     setFiles((current) => mergeUniqueCsv(current, incoming));
@@ -70,18 +84,18 @@ export function useCsvCleaner() {
     try {
       for (const file of files) {
         const key = fileKey(file);
-        setProgress((current) => ({ ...current, [key]: 10 }));
+        setFileProgress(key, PROGRESS_STARTED);
         try {
           const cleaned = await cleanCsv(file, { removeOptionalColumns: optionalColumns });
-          setProgress((current) => ({ ...current, [key]: 80 }));
+          setFileProgress(key, PROGRESS_PARSED);
           zip.file(cleaned.name, cleaned.csv);
           ok += 1;
           removed += cleaned.removed;
-          await new Promise((resolve) => setTimeout(resolve, 120));
-          setProgress((current) => ({ ...current, [key]: 100 }));
+          await wait(FEEDBACK_DELAY_MS);
         } catch (error) {
-          errors.push(`${file.name}: ${(error as Error).message}`);
-          setProgress((current) => ({ ...current, [key]: 100 }));
+          errors.push(`${file.name}: ${getErrorMessage(error)}`);
+        } finally {
+          setFileProgress(key, PROGRESS_DONE);
         }
       }
 
@@ -97,7 +111,7 @@ export function useCsvCleaner() {
     } finally {
       setIsProcessing(false);
     }
-  }, [files, optionalColumns]);
+  }, [files, optionalColumns, setFileProgress]);
 
   const download = useCallback(async () => {
     if (!result) return;
