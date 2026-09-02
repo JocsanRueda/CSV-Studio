@@ -1,122 +1,69 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useRef } from 'react'
+import { TEXTS, SETTINGS } from './config'
+import { useTheme } from './hooks/useTheme'
+import { useCursorGlow } from './hooks/useCursorGlow'
+import { useCsvCleaner } from './hooks/useCsvCleaner'
+import { Header } from './components/Header'
+import { BackgroundEffects } from './components/BackgroundEffects'
+import { CleanerPanel } from './components/CleanerPanel'
+import { FilesPanel } from './components/FilesPanel'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const { theme, toggleTheme } = useTheme()
+  const glowRef = useRef<HTMLDivElement>(null)
+  useCursorGlow(glowRef)
+
+  const {
+    files,
+    progress,
+    result,
+    summary,
+    isProcessing,
+    optionalColumns,
+    addFiles,
+    removeFile,
+    clear,
+    toggleOptionalColumn,
+    clean,
+    download,
+  } = useCsvCleaner()
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.tsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+    <div className="relative min-h-screen overflow-x-hidden bg-[#eef3f7] text-slate-950 antialiased selection:bg-sky-200 dark:bg-[#101820] dark:text-slate-100 dark:selection:bg-sky-900">
+      <BackgroundEffects glowRef={glowRef} />
 
-      <div className="ticks"></div>
+      <main className="relative mx-auto max-w-6xl px-4 py-6 sm:px-6 lg:px-8 lg:py-10">
+        <Header texts={TEXTS} theme={theme} onToggleTheme={toggleTheme} />
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+        <section className="grid gap-6 lg:grid-cols-[1.12fr_.88fr]">
+          <CleanerPanel
+            texts={TEXTS}
+            settings={SETTINGS}
+            optionalColumns={optionalColumns}
+            hasFiles={files.length > 0}
+            isProcessing={isProcessing}
+            hasResult={result !== null}
+            onFilesSelected={addFiles}
+            onToggleOptionalColumn={toggleOptionalColumn}
+            onClean={clean}
+            onClear={clear}
+            onDownload={download}
+          />
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+          <FilesPanel
+            texts={TEXTS}
+            files={files}
+            progress={progress}
+            summary={summary}
+            onRemove={removeFile}
+          />
+        </section>
+
+        <footer className="mt-7 text-center text-xs leading-5 text-slate-500">{TEXTS.footer}</footer>
+      </main>
+    </div>
   )
 }
 
 export default App
+
