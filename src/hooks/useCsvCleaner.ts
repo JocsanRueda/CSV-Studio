@@ -2,7 +2,7 @@ import { useCallback, useState } from 'react';
 import JSZip from 'jszip';
 import { SETTINGS, TEXTS } from '../config';
 import { cleanCsv } from '../lib/csv';
-import { downloadBlob, fileKey, mergeUniqueCsv } from '../lib/files';
+import { dedupeFileName, downloadBlob, fileKey, mergeUniqueCsv } from '../lib/files';
 
 export type OptionalColumns = Record<string, boolean>;
 
@@ -77,6 +77,7 @@ export function useCsvCleaner() {
     setProgress({});
 
     const zip = new JSZip();
+    const usedNames = new Set<string>();
     let ok = 0;
     let removed = 0;
     const errors: string[] = [];
@@ -88,7 +89,7 @@ export function useCsvCleaner() {
         try {
           const cleaned = await cleanCsv(file, { removeOptionalColumns: optionalColumns });
           setFileProgress(key, PROGRESS_PARSED);
-          zip.file(cleaned.name, cleaned.csv);
+          zip.file(dedupeFileName(usedNames, cleaned.name), cleaned.csv);
           ok += 1;
           removed += cleaned.removed;
           await wait(FEEDBACK_DELAY_MS);
