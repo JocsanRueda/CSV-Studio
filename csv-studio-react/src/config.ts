@@ -60,7 +60,7 @@ export const TEXTS: Texts = Object.freeze({
   processedMany: 'archivos procesados',
   removedOne: 'columna eliminada',
   removedMany: 'columnas eliminadas',
-  zipName: 'csv_procesados.zip',
+  zipName: 'CSV_Cleaned.zip',
   bytes: 'B',
   kilobytes: 'KB',
   megabytes: 'MB',
