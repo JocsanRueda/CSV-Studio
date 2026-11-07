@@ -8,10 +8,11 @@ interface FilesPanelProps {
   files: File[];
   progress: Record<string, number>;
   summary: Summary | null;
+  isProcessing: boolean;
   onRemove: (index: number) => void;
 }
 
-export function FilesPanel({ files, progress, summary, onRemove }: FilesPanelProps) {
+export function FilesPanel({ files, progress, summary, isProcessing, onRemove }: FilesPanelProps) {
   const hasFiles = files.length > 0;
 
   return (
@@ -27,7 +28,7 @@ export function FilesPanel({ files, progress, summary, onRemove }: FilesPanelPro
       </div>
 
       {hasFiles ? (
-        <FileList files={files} progress={progress} onRemove={onRemove} />
+        <FileList files={files} progress={progress} isProcessing={isProcessing} onRemove={onRemove} />
       ) : (
         <EmptyState />
       )}

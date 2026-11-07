@@ -30,6 +30,15 @@ export interface Texts {
   bytes: string;
   kilobytes: string;
   megabytes: string;
+  duplicateColumnsTitle: string;
+  duplicateColumnsDescription: string;
+  duplicateHeadersLoading: string;
+  duplicateHeadersError: string;
+  unnamedColumn: string;
+  columnPosition: string;
+  duplicateRowsOne: string;
+  duplicateRowsMany: string;
+  invalidDuplicateColumns: string;
 }
 
 export const TEXTS: Texts = Object.freeze({
@@ -64,6 +73,15 @@ export const TEXTS: Texts = Object.freeze({
   bytes: 'B',
   kilobytes: 'KB',
   megabytes: 'MB',
+  duplicateColumnsTitle: 'Eliminar filas duplicadas',
+  duplicateColumnsDescription: 'Selecciona una o varias columnas para comparar sus valores exactos. Se conserva la primera fila; los valores vacíos también se comparan.',
+  duplicateHeadersLoading: 'Leyendo columnas…',
+  duplicateHeadersError: 'No se pudieron leer las columnas',
+  unnamedColumn: 'Sin nombre',
+  columnPosition: 'Columna',
+  duplicateRowsOne: 'fila duplicada eliminada',
+  duplicateRowsMany: 'filas duplicadas eliminadas',
+  invalidDuplicateColumns: 'Las columnas seleccionadas para buscar duplicados no son válidas.',
 });
 
 export interface Settings {

@@ -5,10 +5,11 @@ interface FileItemProps {
   file: File;
   index: number;
   progress: number;
+  isProcessing: boolean;
   onRemove: (index: number) => void;
 }
 
-export function FileItem({ file, index, progress, onRemove }: FileItemProps) {
+export function FileItem({ file, index, progress, isProcessing, onRemove }: FileItemProps) {
   return (
     <article className="animate-rise relative overflow-hidden flex items-center gap-3 rounded-xl border border-zinc-200 p-3 dark:border-zinc-800">
       <div
@@ -29,9 +30,10 @@ export function FileItem({ file, index, progress, onRemove }: FileItemProps) {
       </div>
       <button
         type="button"
+        disabled={isProcessing}
         onClick={() => onRemove(index)}
         aria-label={`${TEXTS.removeFile} ${file.name}`}
-        className="relative z-10 rounded-full p-2 text-zinc-400 hover:bg-sky-50 hover:text-sky-600 dark:hover:bg-sky-950"
+        className="relative z-10 rounded-full p-2 text-zinc-400 hover:bg-sky-50 hover:text-sky-600 disabled:cursor-not-allowed disabled:opacity-40 dark:hover:bg-sky-950"
       >
         ✕
       </button>

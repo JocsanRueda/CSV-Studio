@@ -15,6 +15,7 @@ Migración en progreso de CSV Studio (vanilla JS + CDN) a React 19 + TypeScript 
 
 - Elimina columnas cuyo encabezado comienza con `px`.
 - Elimina opcionalmente `pyGUID`, `pyLabel` y `pyBoolFlag` (activables/desactivables desde la UI).
+- Para un solo CSV, permite eliminar filas duplicadas según una o varias columnas del archivo original, incluso si esas columnas se eliminan del resultado. Conserva la primera fila de cada combinación y muestra cuántas se eliminaron. La comparación es exacta (distingue mayúsculas y espacios) e incluye valores vacíos; sin columnas seleccionadas no elimina filas. La opción no se aplica a varios archivos.
 - Conserva el delimitador y el salto de línea detectados en el CSV original.
 - Elimina timestamps tipo `20260812T215952.873 GMT` del nombre de salida.
 - Descarga un CSV único o un ZIP cuando se procesan varios archivos.
