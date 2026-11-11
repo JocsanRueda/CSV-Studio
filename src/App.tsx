@@ -20,10 +20,14 @@ function App() {
     summary,
     isProcessing,
     optionalColumns,
+    duplicateColumns,
+    headers,
+    headerError,
     addFiles,
     removeFile,
     clear,
     toggleOptionalColumn,
+    toggleDuplicateColumn,
     clean,
     download,
   } = useCsvCleaner()
@@ -42,8 +46,13 @@ function App() {
             hasFiles={files.length > 0}
             isProcessing={isProcessing}
             hasResult={result !== null}
+            showDuplicateOptions={files.length === 1}
+            headers={headers}
+            headerError={headerError}
+            duplicateColumns={duplicateColumns}
             onFilesSelected={addFiles}
             onToggleOptionalColumn={toggleOptionalColumn}
+            onToggleDuplicateColumn={toggleDuplicateColumn}
             onClean={clean}
             onClear={clear}
             onDownload={download}
@@ -53,6 +62,7 @@ function App() {
             files={files}
             progress={progress}
             summary={summary}
+            isProcessing={isProcessing}
             onRemove={removeFile}
           />
         </section>
@@ -64,4 +74,3 @@ function App() {
 }
 
 export default App
-

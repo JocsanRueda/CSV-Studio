@@ -3,9 +3,10 @@ import { TEXTS } from '../config';
 
 interface DropzoneProps {
   onFilesSelected: (files: File[]) => void;
+  disabled: boolean;
 }
 
-export function Dropzone({ onFilesSelected }: DropzoneProps) {
+export function Dropzone({ onFilesSelected, disabled }: DropzoneProps) {
   const [isDragging, setIsDragging] = useState(false);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
@@ -16,7 +17,7 @@ export function Dropzone({ onFilesSelected }: DropzoneProps) {
   const handleDrop = (event: DragEvent<HTMLLabelElement>) => {
     event.preventDefault();
     setIsDragging(false);
-    onFilesSelected([...event.dataTransfer.files]);
+    if (!disabled) onFilesSelected([...event.dataTransfer.files]);
   };
 
   return (
@@ -39,7 +40,7 @@ export function Dropzone({ onFilesSelected }: DropzoneProps) {
       </div>
       <span className="font-semibold text-zinc-900 dark:text-zinc-100">{TEXTS.dropTitle}</span>
       <span className="mt-1 text-sm text-zinc-500 dark:text-zinc-400">{TEXTS.dropSubtitle}</span>
-      <input id="fileInput" className="sr-only" type="file" accept=".csv,text/csv" multiple onChange={handleChange} />
+      <input id="fileInput" className="sr-only" type="file" accept=".csv,text/csv" multiple disabled={disabled} onChange={handleChange} />
     </label>
   );
 }
