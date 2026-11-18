@@ -39,6 +39,7 @@ export interface Texts {
   duplicateRowsOne: string;
   duplicateRowsMany: string;
   invalidDuplicateColumns: string;
+  backToHome: string;
 }
 
 export const TEXTS: Texts = Object.freeze({
@@ -82,6 +83,7 @@ export const TEXTS: Texts = Object.freeze({
   duplicateRowsOne: 'fila duplicada eliminada',
   duplicateRowsMany: 'filas duplicadas eliminadas',
   invalidDuplicateColumns: 'Las columnas seleccionadas para buscar duplicados no son válidas.',
+  backToHome: 'Volver al inicio',
 });
 
 export interface Settings {

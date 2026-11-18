@@ -9,7 +9,7 @@
     <script>
       (() => {
         const saved = localStorage.getItem('csv-theme');
-        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
+        if (saved !== 'light') {
           document.documentElement.classList.add('dark');
         }
       })();
