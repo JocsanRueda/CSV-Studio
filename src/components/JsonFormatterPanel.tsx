@@ -48,7 +48,7 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
 
       {/* Error message */}
       {state.error && (
-        <div className="flex-shrink-0 px-4 py-2.5 bg-red-50 border-b border-red-200 dark:bg-[#3d2d2d] dark:border-zinc-800">
+        <div className="shrink-0 px-4 py-2.5 bg-red-50 border-b border-red-200 dark:bg-[#3d2d2d] dark:border-zinc-800">
           <p className="text-xs text-red-700 dark:text-red-400">{state.error}</p>
         </div>
       )}
@@ -57,7 +57,7 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
       <div className="flex flex-1 min-h-0">
         {/* Input Editor Container */}
         <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-[#1a1b26] rounded-none overflow-hidden">
-          <div className="flex-shrink-0 px-4 py-2 border-b border-zinc-200 dark:border-[#292e42]">
+          <div className="shrink-0 px-4 py-2 border-b border-zinc-200 dark:border-[#292e42]">
             <label className="text-xs font-semibold text-zinc-600 dark:text-[#a9b1d6] uppercase tracking-wider">
               Entrada
             </label>
@@ -74,11 +74,11 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
         </div>
 
         {/* Vertical Divider */}
-        <div className="w-px bg-zinc-200 dark:bg-[#292e42] flex-shrink-0" />
+        <div className="w-px bg-zinc-200 dark:bg-[#292e42] shrink-0" />
 
         {/* Output Editor Container */}
         <div className="flex-1 flex flex-col min-w-0 bg-white dark:bg-[#1a1b26] rounded-none overflow-hidden">
-          <div className="flex-shrink-0 px-4 py-2 border-b border-zinc-200 dark:border-[#292e42]">
+          <div className="shrink-0 px-4 py-2 border-b border-zinc-200 dark:border-[#292e42]">
             <label className="text-xs font-semibold text-zinc-600 dark:text-[#a9b1d6] uppercase tracking-wider">
               Salida
             </label>

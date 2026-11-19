@@ -46,7 +46,7 @@ function App() {
             type="button"
             onClick={toggleTheme}
             aria-label={TEXTS.themeToggle}
-            className="rounded-lg border border-zinc-200 bg-white p-3 text-zinc-600 shadow-sm transition hover:bg-zinc-50 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500/30 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
+            className="border border-zinc-200 bg-white p-3 rounded-md text-zinc-600 shadow-sm transition hover:bg-zinc-50 hover:text-sky-600 focus:outline-none focus:ring-2 focus:ring-sky-500/30 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-300 dark:hover:bg-zinc-800"
           >
             {theme === 'dark' ? (
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" className="h-5 w-5">
