@@ -9,8 +9,7 @@ import {
   Copy,
   Download,
   Trash2,
-  Settings,
-  Paste,
+  Settings
 } from 'lucide-react';
 
 interface JsonFormatterMenuProps {
@@ -23,7 +22,7 @@ interface JsonFormatterMenuProps {
   onCopyInput: () => void;
   onCopyOutput: () => void;
   onDownload: () => void;
-  onPaste: () => void;
+  onClipboard: () => void;
   onClearAll: () => void;
   onSetIndent: (indent: number) => void;
   currentIndent: number;
@@ -40,7 +39,7 @@ export function JsonFormatterMenu({
   onCopyInput,
   onCopyOutput,
   onDownload,
-  onPaste,
+  onClipboard,
   onClearAll,
   onSetIndent,
   currentIndent,
@@ -145,10 +144,10 @@ export function JsonFormatterMenu({
                 Portapapeles
               </p>
               <button
-                onClick={() => handleAction(onPaste)}
+                onClick={() => handleAction(onClipboard)}
                 className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-300 hover:bg-[#3e3e42] bg-transparent border-0 transition"
               >
-                <Paste size={14} />
+                <Clipboard size={14} />
                 <span>Pegar</span>
               </button>
               <button
