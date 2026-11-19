@@ -3,12 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Herramienta local para limpiar archivos CSV." />
+    <meta name="description" content="Herramientas Pega Systems para trabajar con archivos CSV y JSON." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <title>Limpiador CSV</title>
+    <title>Pega Tools</title>
     <script>
       (() => {
-        const saved = localStorage.getItem('csv-theme');
+        const saved = localStorage.getItem('pega-tools-theme') ?? localStorage.getItem('csv-theme');
         if (saved !== 'light') {
           document.documentElement.classList.add('dark');
         }

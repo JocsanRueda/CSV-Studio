@@ -17,7 +17,7 @@ export function ModeSelectionScreen({ onSelectMode }: ModeSelectionScreenProps) 
             </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight text-zinc-900 sm:text-4xl dark:text-zinc-50">
-            Studio
+            Pega Tools
           </h1>
           <p className="text-lg text-zinc-600 dark:text-zinc-400">
             Elige una herramienta para comenzar

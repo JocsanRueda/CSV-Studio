@@ -1,4 +1,4 @@
-# CSV Studio project instructions
+# Pega Tools project instructions
 
 ## Build, test, and lint
 

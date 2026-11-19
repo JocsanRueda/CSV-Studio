@@ -2,7 +2,7 @@
 
 ## Descripción General
 
-El **JSON Formatter** es una herramienta de formateo y validación de JSON integrada en CSV Studio. Permite a los usuarios procesar archivos JSON de forma rápida y eficiente directamente en el navegador.
+El **JSON Formatter** es una herramienta de formateo y validación de JSON integrada en Pega Tools. Permite a los usuarios procesar archivos JSON de forma rápida y eficiente directamente en el navegador.
 
 ## Características Principales
 
@@ -129,7 +129,7 @@ Características:
 - Union types para estados
 
 ### 4. **UX Consistente**
-- Mismo tema y estilos que CSV Studio
+- Mismo tema y estilos que Pega Tools
 - Tailwind CSS v4 para diseño
 - Colores coherentes (sky para CSV, emerald para JSON)
 
