@@ -7,7 +7,7 @@ const STORAGE_KEY = 'csv-theme';
 function getInitialTheme(): Theme {
   const saved = window.localStorage.getItem(STORAGE_KEY);
   if (saved === 'dark' || saved === 'light') return saved;
-  return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  return 'dark';
 }
 
 // Assumes an inline script in index.html already applied the initial `.dark` class to avoid a flash.
