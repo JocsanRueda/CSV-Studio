@@ -2,10 +2,11 @@ import { useCallback, useEffect, useState } from 'react';
 
 export type Theme = 'light' | 'dark';
 
-const STORAGE_KEY = 'csv-theme';
+const STORAGE_KEY = 'pega-tools-theme';
+const LEGACY_STORAGE_KEY = 'csv-theme';
 
 function getInitialTheme(): Theme {
-  const saved = window.localStorage.getItem(STORAGE_KEY);
+  const saved = window.localStorage.getItem(STORAGE_KEY) ?? window.localStorage.getItem(LEGACY_STORAGE_KEY);
   if (saved === 'dark' || saved === 'light') return saved;
   return 'dark';
 }

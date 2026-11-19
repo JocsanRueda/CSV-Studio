@@ -1,7 +1,7 @@
 # 🚀 JSON Formatter - Guía Rápida
 
 ## ¿Qué es?
-Una herramienta integrada en CSV Studio para formatear, validar y transformar archivos JSON directamente en tu navegador.
+Una herramienta integrada en Pega Tools para formatear, validar y transformar archivos JSON directamente en tu navegador.
 
 ## Características
 
@@ -22,7 +22,7 @@ Una herramienta integrada en CSV Studio para formatear, validar y transformar ar
 
 ## Cómo Usar
 
-1. **Abre CSV Studio** en tu navegador
+1. **Abre Pega Tools** en tu navegador
 2. **Selecciona "Formateador JSON"** en la pantalla inicial
 3. **Pega o carga tu JSON** en el área de entrada
 4. **Elige una operación**:
@@ -51,7 +51,7 @@ Una herramienta integrada en CSV Studio para formatear, validar y transformar ar
 
 ## Características de UX
 
-✅ **Tema oscuro/claro** compartido con CSV Studio; oscuro por defecto y con preferencia guardada
+✅ **Tema oscuro/claro** compartido con Pega Tools; oscuro por defecto y con preferencia guardada
 ✅ **Interfaz responsiva** (funciona en móvil)
 ✅ **Mensajes de error** descriptivos
 ✅ **Botón "Volver al inicio"** siempre disponible

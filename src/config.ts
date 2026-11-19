@@ -43,9 +43,9 @@ export interface Texts {
 }
 
 export const TEXTS: Texts = Object.freeze({
-  pageTitle: 'Limpiador CSV',
-  eyebrow: 'Herramienta de datos',
-  appTitle: 'Limpiador CSV PEGA System',
+  pageTitle: 'Pega Tools',
+  eyebrow: 'Herramientas Pega Systems',
+  appTitle: 'Pega Tools',
   themeToggle: 'Alternar tema',
   heroTitle: 'Preparar archivos CSV',
   heroDescriptionBefore: 'Carga uno o varios archivos. La herramienta eliminará las columnas cuyo encabezado comience con',

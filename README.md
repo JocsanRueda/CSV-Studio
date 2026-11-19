@@ -1,6 +1,6 @@
-# CSV Studio (React + TypeScript)
+# Pega Tools (React + TypeScript)
 
-Migración en progreso de CSV Studio (vanilla JS + CDN) a React 19 + TypeScript + Vite + Tailwind CSS v4, manteniendo el 100% de la funcionalidad original.
+Herramientas Pega Systems para procesar archivos CSV y JSON directamente en el navegador. Construido con React 19, TypeScript, Vite y Tailwind CSS v4.
 
 ## Estado actual
 
