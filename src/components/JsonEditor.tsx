@@ -39,8 +39,8 @@ export function JsonEditor({
       formatOnType: true,
       bracketPairColorization: {
         enabled: true,
+        independentColorPoolPerBracketType: true,
       },
-      'bracketPairColorization.independentColorPoolPerBracketType': true,
       scrollBeyondLastLine: false,
       smoothScrolling: true,
       cursorSmoothCaretAnimation: 'on',
