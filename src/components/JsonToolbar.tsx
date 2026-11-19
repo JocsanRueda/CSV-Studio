@@ -1,5 +1,4 @@
-import { Wand2, Copy, Download, MoreVertical, Clipboard, FileJson, Home, Moon, Sun } from 'lucide-react';
-import { useState, useRef, useEffect } from 'react';
+import { Wand2, Copy, Download, Clipboard, FileJson, Home, Moon, Sun, Sparkles } from 'lucide-react';
 
 interface JsonToolbarProps {
   onFormat: () => void;
@@ -8,6 +7,7 @@ interface JsonToolbarProps {
   onPaste: () => void;
   onBack: () => void;
   onToggleTheme: () => void;
+  onRemovePxObjClass: () => void;
   theme: 'light' | 'dark';
   hasInput: boolean;
 }
@@ -19,25 +19,12 @@ export function JsonToolbar({
   onPaste,
   onBack,
   onToggleTheme,
+  onRemovePxObjClass,
   theme,
   hasInput,
 }: JsonToolbarProps) {
-  const [moreMenuOpen, setMoreMenuOpen] = useState(false);
-  const menuRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
-        setMoreMenuOpen(false);
-      }
-    };
-
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, []);
-
   return (
-    <div className="flex items-center px-4 py-2 bg-white dark:bg-[#1e1e1e] border-b border-zinc-200 dark:border-zinc-800 rounded-none">
+    <div className="flex items-center px-4 py-2 bg-white dark:bg-[#1a1b26] border-b border-zinc-200 dark:border-[#292e42] rounded-none">
       {/* Tool Name - Small and Discrete */}
       <div className="flex items-center gap-1.5 mr-auto">
         <FileJson size={14} className="text-zinc-500" />
@@ -58,6 +45,16 @@ export function JsonToolbar({
         </button>
 
         <button
+          onClick={onRemovePxObjClass}
+          disabled={!hasInput}
+          className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors bg-transparent border-0 p-1"
+          title="Limpiar atributos Pega (pxObjClass)"
+          aria-label="Limpiar atributos Pega (pxObjClass)"
+        >
+          <Sparkles size={16} />
+        </button>
+
+        <button
           onClick={onCopyOutput}
           disabled={!hasInput}
           className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors bg-transparent border-0 p-1"
@@ -75,34 +72,17 @@ export function JsonToolbar({
           <Download size={16} />
         </button>
 
-        {/* More menu */}
-        <div ref={menuRef} className="relative">
-          <button
-            onClick={() => setMoreMenuOpen(!moreMenuOpen)}
-            className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors bg-transparent border-0 p-1"
-            title="Más opciones"
-          >
-            <MoreVertical size={16} />
-          </button>
-
-          {moreMenuOpen && (
-            <div className="absolute right-0 mt-1 w-40 bg-white dark:bg-[#2d2d30] border border-zinc-200 dark:border-zinc-800 shadow-lg z-50 rounded-none">
-              <button
-                onClick={() => {
-                  onPaste();
-                  setMoreMenuOpen(false);
-                }}
-                className="w-full flex items-center gap-2.5 px-3 py-2 text-xs text-zinc-700 hover:bg-zinc-100 dark:text-zinc-300 dark:hover:bg-[#3e3e42] bg-transparent border-0 transition-colors"
-              >
-                <Clipboard size={14} />
-                <span>Pegar</span>
-              </button>
-            </div>
-          )}
-        </div>
+        <button
+          onClick={onPaste}
+          className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 transition-colors bg-transparent border-0 p-1"
+          title="Pegar"
+          aria-label="Pegar"
+        >
+          <Clipboard size={16} />
+        </button>
 
         {/* Divider */}
-        <div className="w-px h-5 bg-zinc-200 dark:bg-zinc-700 mx-1" />
+        <div className="w-px h-5 bg-zinc-200 dark:bg-[#414868] mx-1" />
 
         {/* Theme Toggle */}
         <button

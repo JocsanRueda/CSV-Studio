@@ -7,6 +7,7 @@ import {
   validateJson,
   type FormatResult,
 } from '../lib/json';
+import { removePxObjClass } from '../lib/pegaCleaner';
 
 export interface JsonFormatterState {
   input: string;
@@ -41,8 +42,13 @@ export const useJsonFormatter = () => {
     try {
       const text = await navigator.clipboard.readText();
       updateInput(text);
+      setState((prev) => ({ ...prev, error: undefined }));
       return true;
     } catch {
+      setState((prev) => ({
+        ...prev,
+        error: 'No se pudo acceder al portapapeles. Comprueba los permisos del navegador.',
+      }));
       return false;
     }
   }, [updateInput]);
@@ -136,6 +142,19 @@ export const useJsonFormatter = () => {
     }));
   }, []);
 
+  const cleanPega = useCallback(() => {
+    try {
+      const cleaned = removePxObjClass(state.input, state.indent);
+      performFormat({ json: cleaned, isValid: true });
+    } catch (error) {
+      performFormat({
+        json: '',
+        isValid: false,
+        error: error instanceof Error ? error.message : 'Error al limpiar Pega',
+      });
+    }
+  }, [state.input, state.indent, performFormat]);
+
   return {
     state,
     updateInput,
@@ -150,5 +169,6 @@ export const useJsonFormatter = () => {
     downloadJson,
     setIndent,
     swapInputOutput,
+    cleanPega,
   };
 };

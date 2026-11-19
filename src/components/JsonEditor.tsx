@@ -2,6 +2,30 @@ import { useEffect, useRef } from 'react';
 import * as monaco from 'monaco-editor';
 import type { Theme } from '../hooks/useTheme';
 
+monaco.editor.defineTheme('tokyo-night', {
+  base: 'vs-dark',
+  inherit: true,
+  rules: [
+    { token: 'string.key.json', foreground: '7aa2f7' },
+    { token: 'string.value.json', foreground: '9ece6a' },
+    { token: 'number', foreground: 'ff9e64' },
+    { token: 'keyword', foreground: 'bb9af7' },
+    { token: 'delimiter', foreground: 'a9b1d6' },
+  ],
+  colors: {
+    'editor.background': '#1a1b26',
+    'editor.foreground': '#c0caf5',
+    'editorLineNumber.foreground': '#565f89',
+    'editorLineNumber.activeForeground': '#a9b1d6',
+    'editorCursor.foreground': '#c0caf5',
+    'editor.selectionBackground': '#33467c',
+    'editor.inactiveSelectionBackground': '#292e42',
+    'editor.lineHighlightBackground': '#1f2335',
+    'editorIndentGuide.background1': '#292e42',
+    'editorIndentGuide.activeBackground1': '#414868',
+  },
+});
+
 interface JsonEditorProps {
   value: string;
   onChange: (value: string) => void;
@@ -78,7 +102,7 @@ export function JsonEditor({
   }, []);
 
   useEffect(() => {
-    monaco.editor.setTheme(theme === 'dark' ? 'vs-dark' : 'vs');
+    monaco.editor.setTheme(theme === 'dark' ? 'tokyo-night' : 'vs');
   }, [theme]);
 
   useEffect(() => {
@@ -87,5 +111,5 @@ export function JsonEditor({
     }
   }, [value]);
 
-  return <div ref={editorRef} className="w-full h-full bg-white dark:bg-[#1e1e1e] rounded-none" />;
+  return <div ref={editorRef} className="w-full h-full bg-white dark:bg-[#1a1b26] rounded-none" />;
 }

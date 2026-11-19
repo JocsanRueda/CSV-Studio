@@ -20,6 +20,8 @@ Migración en progreso de CSV Studio (vanilla JS + CDN) a React 19 + TypeScript 
 - Elimina timestamps tipo `20260812T215952.873 GMT` del nombre de salida.
 - Descarga un CSV único o un ZIP cuando se procesan varios archivos.
 - Todo el procesamiento ocurre en el navegador; no se envían archivos a un servidor.
+- El formateador JSON permite pegar desde la barra superior y quitar las propiedades `pxObjClass` de Pega, incluso en objetos y arreglos anidados.
+- El modo oscuro es el predeterminado; el editor JSON usa la paleta Tokyo Night y la preferencia de tema se conserva en el navegador.
 
 ## Requisitos
 
