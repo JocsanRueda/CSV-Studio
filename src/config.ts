@@ -31,6 +31,7 @@ export interface Texts {
   kilobytes: string;
   megabytes: string;
   duplicateColumnsTitle: string;
+  duplicateRowsToggleDescription: string;
   duplicateColumnsDescription: string;
   duplicateHeadersLoading: string;
   duplicateHeadersError: string;
@@ -75,6 +76,7 @@ export const TEXTS: Texts = Object.freeze({
   kilobytes: 'KB',
   megabytes: 'MB',
   duplicateColumnsTitle: 'Eliminar filas duplicadas',
+  duplicateRowsToggleDescription: 'Opcional. Actívalo para elegir las columnas que se usarán al buscar duplicados.',
   duplicateColumnsDescription: 'Selecciona una o varias columnas para comparar sus valores exactos. Se conserva la primera fila; los valores vacíos también se comparan.',
   duplicateHeadersLoading: 'Leyendo columnas…',
   duplicateHeadersError: 'No se pudieron leer las columnas',
