@@ -60,7 +60,7 @@ export function ModeSelectionScreen({ onSelectMode }: ModeSelectionScreenProps) 
                 </span>
               </div>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-br from-blue-50 to-transparent opacity-0 transition group-hover:opacity-100 dark:from-blue-950/10" />
+            <div className="absolute inset-0 bg-linear-to-br from-blue-50 to-transparent opacity-0 transition group-hover:opacity-100 dark:from-blue-950/10" />
           </button>
 
           {/* JSON Mode */}
@@ -98,7 +98,7 @@ export function ModeSelectionScreen({ onSelectMode }: ModeSelectionScreenProps) 
                 </span>
               </div>
             </div>
-            <div className="absolute inset-0 bg-gradient-to-br from-emerald-50 to-transparent opacity-0 transition group-hover:opacity-100 dark:from-emerald-950/10" />
+            <div className="absolute inset-0 bg-linear-to-br from-emerald-50 to-transparent opacity-0 transition group-hover:opacity-100 dark:from-emerald-950/10" />
           </button>
         </div>
 
