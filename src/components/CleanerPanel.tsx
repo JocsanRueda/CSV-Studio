@@ -13,11 +13,13 @@ interface CleanerPanelProps {
   isProcessing: boolean;
   hasResult: boolean;
   showDuplicateOptions: boolean;
+  duplicateRowsEnabled: boolean;
   headers: string[] | null;
   headerError: string | null;
   duplicateColumns: readonly number[];
   onFilesSelected: (files: File[]) => void;
   onToggleOptionalColumn: (name: string) => void;
+  onToggleDuplicateRows: () => void;
   onToggleDuplicateColumn: (index: number) => void;
   onClean: () => void;
   onClear: () => void;
@@ -31,11 +33,13 @@ export function CleanerPanel({
   isProcessing,
   hasResult,
   showDuplicateOptions,
+  duplicateRowsEnabled,
   headers,
   headerError,
   duplicateColumns,
   onFilesSelected,
   onToggleOptionalColumn,
+  onToggleDuplicateRows,
   onToggleDuplicateColumn,
   onClean,
   onClear,
@@ -55,7 +59,9 @@ export function CleanerPanel({
           <DuplicateRowsPanel
             headers={headers}
             error={headerError}
+            enabled={duplicateRowsEnabled}
             selectedColumns={duplicateColumns}
+            onToggleEnabled={onToggleDuplicateRows}
             onToggle={onToggleDuplicateColumn}
           />
         )}

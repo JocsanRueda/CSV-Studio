@@ -92,15 +92,14 @@ export async function cleanCsv(
   const seen = new Set<string>();
   let duplicatesRemoved = 0;
   const cleanedRows = [keep.map(({ header }) => header)];
-  for (let rowIndex = 1; rowIndex < rows.length; rowIndex += 1) {
+  let lastRowIndex = rows.length - 1;
+  while (lastRowIndex > 0 && rows[lastRowIndex].every((value) => value === '')) {
+    lastRowIndex -= 1;
+  }
+
+  for (let rowIndex = 1; rowIndex <= lastRowIndex; rowIndex += 1) {
     const row = rows[rowIndex];
-    // Papa represents a final line ending as an extra empty row; preserve it.
-    const isTrailingNewline = rowIndex === rows.length - 1 && row.length === 1 && row[0] === '' && /[\r\n]$/.test(raw);
-    if (duplicateColumns.length > 0 && isTrailingNewline) {
-      cleanedRows.push(['']);
-      continue;
-    }
-    if (duplicateColumns.length > 0 && !isTrailingNewline) {
+    if (duplicateColumns.length > 0) {
       const key = JSON.stringify(duplicateColumns.map((index) => row[index] ?? ''));
       if (seen.has(key)) {
         duplicatesRemoved += 1;

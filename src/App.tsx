@@ -25,6 +25,7 @@ function App() {
     summary,
     isProcessing,
     optionalColumns,
+    duplicateRowsEnabled,
     duplicateColumns,
     headers,
     headerError,
@@ -32,6 +33,7 @@ function App() {
     removeFile,
     clear,
     toggleOptionalColumn,
+    toggleDuplicateRows,
     toggleDuplicateColumn,
     clean,
     download,
@@ -85,11 +87,13 @@ function App() {
                   isProcessing={isProcessing}
                   hasResult={result !== null}
                   showDuplicateOptions={files.length === 1}
+                  duplicateRowsEnabled={duplicateRowsEnabled}
                   headers={headers}
                   headerError={headerError}
                   duplicateColumns={duplicateColumns}
                   onFilesSelected={addFiles}
                   onToggleOptionalColumn={toggleOptionalColumn}
+                  onToggleDuplicateRows={toggleDuplicateRows}
                   onToggleDuplicateColumn={toggleDuplicateColumn}
                   onClean={clean}
                   onClear={clear}

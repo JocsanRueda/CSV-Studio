@@ -46,6 +46,7 @@ export function useCsvCleaner() {
   const [summary, setSummary] = useState<Summary | null>(null);
   const [isProcessing, setIsProcessing] = useState(false);
   const [optionalColumns, setOptionalColumns] = useState<OptionalColumns>(defaultOptionalColumns);
+  const [duplicateRowsEnabled, setDuplicateRowsEnabled] = useState(false);
   const [duplicateColumns, setDuplicateColumns] = useState<number[]>([]);
   const [headerResult, setHeaderResult] = useState<{ file: File; headers: string[]; error: string | null } | null>(null);
   const singleFile = files.length === 1 ? files[0] : null;
@@ -70,6 +71,7 @@ export function useCsvCleaner() {
 
   const addFiles = useCallback((incoming: File[]) => {
     setFiles((current) => mergeUniqueCsv(current, incoming));
+    setDuplicateRowsEnabled(false);
     setDuplicateColumns([]);
     setSummary(null);
     setResult(null);
@@ -77,6 +79,7 @@ export function useCsvCleaner() {
 
   const removeFile = useCallback((index: number) => {
     setFiles((current) => current.filter((_, i) => i !== index));
+    setDuplicateRowsEnabled(false);
     setDuplicateColumns([]);
     setSummary(null);
     setResult(null);
@@ -87,6 +90,7 @@ export function useCsvCleaner() {
     setProgress({});
     setResult(null);
     setSummary(null);
+    setDuplicateRowsEnabled(false);
     setDuplicateColumns([]);
     setHeaderResult(null);
   }, []);
@@ -101,6 +105,12 @@ export function useCsvCleaner() {
     setDuplicateColumns((current) =>
       current.includes(index) ? current.filter((column) => column !== index) : [...current, index],
     );
+    setResult(null);
+    setSummary(null);
+  }, []);
+
+  const toggleDuplicateRows = useCallback(() => {
+    setDuplicateRowsEnabled((current) => !current);
     setResult(null);
     setSummary(null);
   }, []);
@@ -124,7 +134,7 @@ export function useCsvCleaner() {
         try {
           const cleaned = await cleanCsv(file, {
             removeOptionalColumns: optionalColumns,
-            duplicateColumns: files.length === 1 ? duplicateColumns : [],
+            duplicateColumns: files.length === 1 && duplicateRowsEnabled ? duplicateColumns : [],
           });
           setFileProgress(key, PROGRESS_PARSED);
           zip.file(dedupeFileName(usedNames, cleaned.name), cleaned.csv);
@@ -150,13 +160,15 @@ export function useCsvCleaner() {
       setSummary({
         ok,
         removed,
-        duplicatesRemoved: ok > 0 && files.length === 1 && duplicateColumns.length > 0 ? duplicatesRemoved : null,
+        duplicatesRemoved: ok > 0 && files.length === 1 && duplicateRowsEnabled && duplicateColumns.length > 0
+          ? duplicatesRemoved
+          : null,
         errors,
       });
     } finally {
       setIsProcessing(false);
     }
-  }, [files, optionalColumns, duplicateColumns, setFileProgress]);
+  }, [files, optionalColumns, duplicateRowsEnabled, duplicateColumns, setFileProgress]);
 
   const download = useCallback(async () => {
     if (!result) return;
@@ -174,6 +186,7 @@ export function useCsvCleaner() {
     summary,
     isProcessing,
     optionalColumns,
+    duplicateRowsEnabled,
     duplicateColumns,
     headers: singleFile && headerResult?.file === singleFile ? headerResult.headers : null,
     headerError: singleFile && headerResult?.file === singleFile ? headerResult.error : null,
@@ -181,6 +194,7 @@ export function useCsvCleaner() {
     removeFile,
     clear,
     toggleOptionalColumn,
+    toggleDuplicateRows,
     toggleDuplicateColumn,
     clean,
     download,
