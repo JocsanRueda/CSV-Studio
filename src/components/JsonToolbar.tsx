@@ -1,6 +1,8 @@
-import { Wand2, Copy, Download, Clipboard, FileJson, Home, Moon, Sun, Sparkles } from 'lucide-react';
+import { Wand2, Copy, Download, Clipboard, FileJson, Home, Moon, Sun, Sparkles, Undo2, Redo2 } from 'lucide-react';
 
 interface JsonToolbarProps {
+  onUndo: () => void;
+  onRedo: () => void;
   onFormat: () => void;
   onCopyOutput: () => void;
   onDownload: () => void;
@@ -10,9 +12,13 @@ interface JsonToolbarProps {
   onRemovePxObjClass: () => void;
   theme: 'light' | 'dark';
   hasInput: boolean;
+  canUndo: boolean;
+  canRedo: boolean;
 }
 
 export function JsonToolbar({
+  onUndo,
+  onRedo,
   onFormat,
   onCopyOutput,
   onDownload,
@@ -22,6 +28,8 @@ export function JsonToolbar({
   onRemovePxObjClass,
   theme,
   hasInput,
+  canUndo,
+  canRedo,
 }: JsonToolbarProps) {
   return (
     <div className="flex items-center px-4 py-2 bg-white dark:bg-[#1a1b26] border-b border-zinc-200 dark:border-[#292e42] rounded-none">
@@ -35,6 +43,26 @@ export function JsonToolbar({
 
       {/* Actions */}
       <div className="flex items-center gap-3">
+        <button
+          onClick={onUndo}
+          disabled={!canUndo}
+          className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors bg-transparent border-0 p-1"
+          title="Deshacer"
+          aria-label="Deshacer"
+        >
+          <Undo2 size={16} />
+        </button>
+
+        <button
+          onClick={onRedo}
+          disabled={!canRedo}
+          className="text-zinc-600 hover:text-zinc-900 dark:text-zinc-400 dark:hover:text-zinc-100 disabled:opacity-30 disabled:cursor-not-allowed transition-colors bg-transparent border-0 p-1"
+          title="Rehacer"
+          aria-label="Rehacer"
+        >
+          <Redo2 size={16} />
+        </button>
+
         <button
           onClick={onFormat}
           disabled={!hasInput}

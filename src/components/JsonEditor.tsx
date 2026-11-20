@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { forwardRef, useEffect, useImperativeHandle, useRef } from 'react';
 import * as monaco from 'monaco-editor';
 import type { Theme } from '../hooks/useTheme';
 
@@ -29,29 +29,62 @@ monaco.editor.defineTheme('tokyo-night', {
 interface JsonEditorProps {
   value: string;
   onChange: (value: string) => void;
+  onPaste?: (value: string) => void;
+  onHistoryChange?: (canUndo: boolean, canRedo: boolean) => void;
   theme: Theme;
   readOnly?: boolean;
   placeholder?: string;
 }
 
-export function JsonEditor({
+export interface JsonEditorHandle {
+  undo: () => void;
+  redo: () => void;
+  paste: (value: string) => void;
+}
+
+export const JsonEditor = forwardRef<JsonEditorHandle, JsonEditorProps>(function JsonEditor({
   value,
   onChange,
+  onPaste,
+  onHistoryChange,
   theme,
   readOnly = false,
-}: JsonEditorProps) {
+}, ref) {
   const editorRef = useRef<HTMLDivElement>(null);
   const monacoEditorRef = useRef<monaco.editor.IStandaloneCodeEditor | null>(null);
+  const callbacksRef = useRef({ onChange, onPaste, onHistoryChange });
+  const initialValueRef = useRef(value);
+  const readOnlyRef = useRef(readOnly);
+
+  useEffect(() => {
+    callbacksRef.current = { onChange, onPaste, onHistoryChange };
+  }, [onChange, onPaste, onHistoryChange]);
+
+  useImperativeHandle(ref, () => ({
+    undo: () => monacoEditorRef.current?.getModel()?.undo(),
+    redo: () => monacoEditorRef.current?.getModel()?.redo(),
+    paste: (text) => {
+      const editor = monacoEditorRef.current;
+      const model = editor?.getModel();
+      if (!editor || !model) return;
+
+      editor.executeEdits('clipboard-paste', [{
+        range: model.getFullModelRange(),
+        text,
+        forceMoveMarkers: true,
+      }]);
+    },
+  }), []);
 
   useEffect(() => {
     if (!editorRef.current) return;
 
     const editor = monaco.editor.create(editorRef.current, {
-      value: value || '',
+      value: initialValueRef.current || '',
       language: 'json',
       minimap: { enabled: false },
       automaticLayout: true,
-      readOnly: readOnly,
+      readOnly: readOnlyRef.current,
       fontFamily: '"JetBrains Mono", monospace',
       fontSize: 13,
       lineNumbers: 'on',
@@ -59,7 +92,7 @@ export function JsonEditor({
       folding: true,
       foldingStrategy: 'indentation',
       showUnused: true,
-      formatOnPaste: true,
+      formatOnPaste: false,
       formatOnType: true,
       bracketPairColorization: {
         enabled: true,
@@ -90,13 +123,20 @@ export function JsonEditor({
 
     const handleChange = () => {
       const content = editor.getValue();
-      onChange(content);
+      callbacksRef.current.onChange(content);
+      const model = editor.getModel();
+      callbacksRef.current.onHistoryChange?.(model?.canUndo() ?? false, model?.canRedo() ?? false);
     };
 
     const subscription = editor.onDidChangeModelContent(handleChange);
+    const pasteSubscription = editor.onDidPaste(() => callbacksRef.current.onPaste?.(editor.getValue()));
+    const model = editor.getModel();
+    callbacksRef.current.onHistoryChange?.(model?.canUndo() ?? false, model?.canRedo() ?? false);
 
     return () => {
       subscription.dispose();
+      pasteSubscription.dispose();
+      callbacksRef.current.onHistoryChange?.(false, false);
       editor.dispose();
     };
   }, []);
@@ -112,4 +152,4 @@ export function JsonEditor({
   }, [value]);
 
   return <div ref={editorRef} className="w-full h-full bg-white dark:bg-[#1a1b26] rounded-none" />;
-}
+});
