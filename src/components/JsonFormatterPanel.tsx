@@ -21,8 +21,13 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
   const [showShortcutHints, setShowShortcutHints] = useState(false);
 
   useEffect(() => {
+    let suppressAltRelease = false;
+
     const handleKeyDown = (event: KeyboardEvent) => {
-      if (event.key === 'Alt' && !event.ctrlKey && !event.metaKey && !event.getModifierState('AltGraph')) {
+      if (event.key === 'Alt' && !event.ctrlKey && !event.metaKey && !event.shiftKey
+        && !event.isComposing && !event.getModifierState('AltGraph')) {
+        event.preventDefault();
+        suppressAltRelease = true;
         setShowShortcutHints(true);
         return;
       }
@@ -52,9 +57,16 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
     };
 
     const handleKeyUp = (event: KeyboardEvent) => {
+      if (event.key === 'Alt' && suppressAltRelease) {
+        event.preventDefault();
+        suppressAltRelease = false;
+      }
       if (!event.altKey) setShowShortcutHints(false);
     };
-    const handleBlur = () => setShowShortcutHints(false);
+    const handleBlur = () => {
+      suppressAltRelease = false;
+      setShowShortcutHints(false);
+    };
 
     window.addEventListener('keydown', handleKeyDown, true);
     window.addEventListener('keyup', handleKeyUp, true);
