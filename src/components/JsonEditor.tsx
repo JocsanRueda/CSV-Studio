@@ -100,7 +100,7 @@ export const JsonEditor = forwardRef<JsonEditorHandle, JsonEditorProps>(function
       },
       scrollBeyondLastLine: false,
       smoothScrolling: true,
-      cursorSmoothCaretAnimation: 'on',
+      cursorSmoothCaretAnimation: 'off',
       padding: { top: 16, bottom: 16 },
       wordWrap: 'off',
       rulers: [],
@@ -121,6 +121,15 @@ export const JsonEditor = forwardRef<JsonEditorHandle, JsonEditorProps>(function
 
     monacoEditorRef.current = editor;
 
+    // Monaco caches font widths, which can change when a web font finishes loading.
+    const remeasureFonts = () => monaco.editor.remeasureFonts();
+    let disposed = false;
+    document.fonts.addEventListener('loadingdone', remeasureFonts);
+    document.fonts.addEventListener('loadingerror', remeasureFonts);
+    void document.fonts.ready.then(() => {
+      if (!disposed) remeasureFonts();
+    });
+
     const handleChange = () => {
       const content = editor.getValue();
       callbacksRef.current.onChange(content);
@@ -134,6 +143,9 @@ export const JsonEditor = forwardRef<JsonEditorHandle, JsonEditorProps>(function
     callbacksRef.current.onHistoryChange?.(model?.canUndo() ?? false, model?.canRedo() ?? false);
 
     return () => {
+      disposed = true;
+      document.fonts.removeEventListener('loadingdone', remeasureFonts);
+      document.fonts.removeEventListener('loadingerror', remeasureFonts);
       subscription.dispose();
       pasteSubscription.dispose();
       callbacksRef.current.onHistoryChange?.(false, false);
