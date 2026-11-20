@@ -11,12 +11,35 @@ import { ModeSelectionScreen } from './components/ModeSelectionScreen'
 import { JsonFormatterPanel } from './components/JsonFormatterPanel'
 
 type AppMode = 'selection' | 'csv' | 'json'
+type ToolMode = Exclude<AppMode, 'selection'>
+
+const LAST_TOOL_KEY = 'pega-tools-last-tool'
+
+function getInitialMode(): AppMode {
+  try {
+    const saved = window.localStorage.getItem(LAST_TOOL_KEY)
+    if (saved === 'csv' || saved === 'json') return saved
+    if (saved !== null) console.warn('Herramienta guardada no reconocida:', saved)
+  } catch (error) {
+    console.error('No se pudo recuperar la última herramienta utilizada.', error)
+  }
+  return 'selection'
+}
 
 function App() {
   const { theme, toggleTheme } = useTheme()
   const glowRef = useRef<HTMLDivElement>(null)
-  const [mode, setMode] = useState<AppMode>('selection')
+  const [mode, setMode] = useState<AppMode>(getInitialMode)
   useCursorGlow(glowRef)
+
+  const selectTool = (tool: ToolMode) => {
+    setMode(tool)
+    try {
+      window.localStorage.setItem(LAST_TOOL_KEY, tool)
+    } catch (error) {
+      console.error('No se pudo guardar la última herramienta utilizada.', error)
+    }
+  }
 
   const {
     files,
@@ -62,7 +85,7 @@ function App() {
             )}
           </button>
         </div>
-        <ModeSelectionScreen onSelectMode={setMode} />
+        <ModeSelectionScreen onSelectMode={selectTool} />
       </div>
     )
   }

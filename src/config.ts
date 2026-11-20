@@ -97,3 +97,21 @@ export const SETTINGS: Settings = Object.freeze({
   systemPrefix: 'px',
   optionalExactColumns: ['pyGUID', 'pyLabel', 'pyBoolFlag'],
 });
+
+export const JSON_SHORTCUTS = {
+  undo: { key: 'U', label: 'Deshacer' },
+  redo: { key: 'R', label: 'Rehacer' },
+  format: { key: 'F', label: 'Formatear JSON' },
+  clean: { key: 'L', label: 'Limpiar atributos Pega' },
+  copy: { key: 'C', label: 'Copiar resultado' },
+  download: { key: 'D', label: 'Descargar JSON' },
+  paste: { key: 'V', label: 'Pegar en la entrada' },
+  theme: { key: 'T', label: 'Cambiar tema' },
+  home: { key: 'H', label: 'Volver al inicio' },
+  newDocument: { key: 'N', label: 'Crear documento (barra desplegada)' },
+  sidebar: { key: 'B', label: 'Contraer o desplegar barra lateral' },
+  renameDocument: { key: 'E', label: 'Renombrar documento activo (barra desplegada)' },
+  pinDocument: { key: 'I', label: 'Fijar o desfijar documento activo (barra desplegada)' },
+  deleteDocument: { key: 'X', label: 'Eliminar documento activo sin confirmar (barra desplegada)' },
+  help: { key: 'K', label: 'Mostrar u ocultar atajos' },
+} as const;

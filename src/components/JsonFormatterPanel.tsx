@@ -1,8 +1,9 @@
-import { useCallback, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useJsonFormatter } from '../hooks/useJsonFormatter';
 import { useJsonDocuments } from '../hooks/useJsonDocuments';
+import { JSON_SHORTCUTS } from '../config';
 import { JsonEditor, type JsonEditorHandle } from './JsonEditor';
-import { JsonDocumentsSidebar } from './JsonDocumentsSidebar';
+import { JsonDocumentsSidebar, type JsonDocumentsSidebarHandle } from './JsonDocumentsSidebar';
 import { JsonToolbar } from './JsonToolbar';
 
 interface JsonFormatterPanelProps {
@@ -13,8 +14,57 @@ interface JsonFormatterPanelProps {
 
 export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatterPanelProps) {
   const inputEditorRef = useRef<JsonEditorHandle>(null);
+  const sidebarRef = useRef<JsonDocumentsSidebarHandle>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
   const [canUndo, setCanUndo] = useState(false);
   const [canRedo, setCanRedo] = useState(false);
+  const [showShortcutHints, setShowShortcutHints] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Alt' && !event.ctrlKey && !event.metaKey && !event.getModifierState('AltGraph')) {
+        setShowShortcutHints(true);
+        return;
+      }
+
+      if (!event.altKey || event.ctrlKey || event.metaKey || event.shiftKey || event.repeat
+        || event.isComposing || event.getModifierState('AltGraph')) return;
+
+      const target = event.target;
+      if (target instanceof HTMLElement
+        && target.matches('input, textarea, [contenteditable="true"]')
+        && !target.closest('.monaco-editor')) return;
+
+      const match = /^Key([A-Z])$/.exec(event.code);
+      if (!match) return;
+      const button = panelRef.current?.querySelector<HTMLButtonElement>(
+        `button[data-json-shortcut="${match[1]}"]:not(:disabled)`
+      );
+      if (!button) return;
+
+      event.preventDefault();
+      event.stopPropagation();
+      if (match[1] === JSON_SHORTCUTS.renameDocument.key) {
+        sidebarRef.current?.renameActive();
+      } else {
+        button.click();
+      }
+    };
+
+    const handleKeyUp = (event: KeyboardEvent) => {
+      if (!event.altKey) setShowShortcutHints(false);
+    };
+    const handleBlur = () => setShowShortcutHints(false);
+
+    window.addEventListener('keydown', handleKeyDown, true);
+    window.addEventListener('keyup', handleKeyUp, true);
+    window.addEventListener('blur', handleBlur);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown, true);
+      window.removeEventListener('keyup', handleKeyUp, true);
+      window.removeEventListener('blur', handleBlur);
+    };
+  }, []);
   const {
     documents,
     activeDocument,
@@ -96,7 +146,7 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
   };
 
   return (
-    <div className="flex flex-col h-full bg-white dark:bg-[#1a1b26] rounded-none">
+    <div ref={panelRef} className="flex flex-col h-full bg-white dark:bg-[#1a1b26] rounded-none">
       {/* Toolbar */}
       <JsonToolbar
         onUndo={() => inputEditorRef.current?.undo()}
@@ -112,6 +162,7 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
         hasInput={state.input.trim().length > 0}
         canUndo={canUndo}
         canRedo={canRedo}
+        showShortcutHints={showShortcutHints}
       />
 
       {/* Error message */}
@@ -124,6 +175,7 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
       {/* Editors Container */}
       <div className="flex flex-1 min-h-0">
         <JsonDocumentsSidebar
+          ref={sidebarRef}
           documents={documents}
           activeDocumentId={activeDocument.id}
           storageError={storageError}
@@ -132,6 +184,7 @@ export function JsonFormatterPanel({ onBack, theme, onToggleTheme }: JsonFormatt
           onRename={renameDocument}
           onTogglePinned={togglePinned}
           onDelete={handleDeleteDocument}
+          showShortcutHints={showShortcutHints}
         />
         <div className="flex min-w-0 flex-1">
           {/* Input Editor Container */}
