@@ -15,43 +15,32 @@ export interface JsonFormatterState {
   isValid: boolean;
   error?: string;
   indent: number;
-  history: string[];
-  historyIndex: number;
 }
 
-export const useJsonFormatter = () => {
+export const useJsonFormatter = (initialInput = '') => {
   const [state, setState] = useState<JsonFormatterState>({
-    input: '',
+    input: initialInput,
     output: '',
     isValid: false,
     indent: 2,
-    history: [],
-    historyIndex: -1,
   });
 
   const updateInput = useCallback((input: string) => {
     setState((prev) => ({
       ...prev,
       input,
-      history: [input],
-      historyIndex: 0,
     }));
   }, []);
 
-  const pasteFromClipboard = useCallback(async () => {
-    try {
-      const text = await navigator.clipboard.readText();
-      updateInput(text);
-      setState((prev) => ({ ...prev, error: undefined }));
-      return true;
-    } catch {
-      setState((prev) => ({
-        ...prev,
-        error: 'No se pudo acceder al portapapeles. Comprueba los permisos del navegador.',
-      }));
-      return false;
-    }
-  }, [updateInput]);
+  const loadInput = useCallback((input: string) => {
+    setState((previous) => ({
+      ...previous,
+      input,
+      output: '',
+      isValid: false,
+      error: undefined,
+    }));
+  }, []);
 
   const performFormat = useCallback(
     (result: FormatResult) => {
@@ -64,6 +53,26 @@ export const useJsonFormatter = () => {
     },
     []
   );
+
+  const formatInput = useCallback((input: string) => {
+    performFormat(formatJson(input, state.indent));
+  }, [state.indent, performFormat]);
+
+  const pasteFromClipboard = useCallback(async (onPaste: (text: string) => void) => {
+    let text: string;
+    try {
+      text = await navigator.clipboard.readText();
+    } catch {
+      setState((prev) => ({
+        ...prev,
+        error: 'No se pudo acceder al portapapeles. Comprueba los permisos del navegador.',
+      }));
+      return false;
+    }
+    onPaste(text);
+    formatInput(text);
+    return true;
+  }, [formatInput]);
 
   const format = useCallback(() => {
     const result = formatJson(state.input, state.indent);
@@ -100,8 +109,6 @@ export const useJsonFormatter = () => {
       output: '',
       isValid: false,
       indent: 2,
-      history: [],
-      historyIndex: -1,
     });
   }, []);
 
@@ -158,7 +165,9 @@ export const useJsonFormatter = () => {
   return {
     state,
     updateInput,
+    loadInput,
     pasteFromClipboard,
+    formatInput,
     format,
     minify,
     sortKeys,
