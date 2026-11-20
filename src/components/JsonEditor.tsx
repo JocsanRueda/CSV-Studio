@@ -52,7 +52,7 @@ export function JsonEditor({
       minimap: { enabled: false },
       automaticLayout: true,
       readOnly: readOnly,
-      fontFamily: '"Fira Code", "Courier New", monospace',
+      fontFamily: '"JetBrains Mono", monospace',
       fontSize: 13,
       lineNumbers: 'on',
       lineNumbersMinChars: 3,
