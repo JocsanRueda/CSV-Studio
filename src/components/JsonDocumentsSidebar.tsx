@@ -133,7 +133,7 @@ export const JsonDocumentsSidebar = forwardRef<JsonDocumentsSidebarHandle, JsonD
                       title="Haz doble clic para cambiar el nombre"
                       data-json-shortcut={isActive ? JSON_SHORTCUTS.renameDocument.key : undefined}
                     >
-                      <span className="truncate">{document.name}</span>
+                      <span className="truncate">{document.name.replace(/\.json$/i, '')}</span>
                       <ShortcutHint shortcut={JSON_SHORTCUTS.renameDocument.key} visible={showShortcutHints && isActive} />
                     </button>
                   )}
