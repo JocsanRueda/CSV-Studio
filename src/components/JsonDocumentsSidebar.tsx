@@ -1,6 +1,8 @@
-import { useRef, useState } from 'react';
+import { forwardRef, useImperativeHandle, useRef, useState } from 'react';
 import { ChevronLeft, ChevronRight, FilePlus2, Pin, Trash2 } from 'lucide-react';
+import { JSON_SHORTCUTS } from '../config';
 import type { JsonDocument } from '../hooks/useJsonDocuments';
+import { ShortcutHint } from './ShortcutHint';
 
 interface JsonDocumentsSidebarProps {
   documents: JsonDocument[];
@@ -11,9 +13,14 @@ interface JsonDocumentsSidebarProps {
   onRename: (id: string, name: string) => void;
   onTogglePinned: (id: string) => void;
   onDelete: (id: string) => void;
+  showShortcutHints: boolean;
 }
 
-export function JsonDocumentsSidebar({
+export interface JsonDocumentsSidebarHandle {
+  renameActive: () => void;
+}
+
+export const JsonDocumentsSidebar = forwardRef<JsonDocumentsSidebarHandle, JsonDocumentsSidebarProps>(function JsonDocumentsSidebar({
   documents,
   activeDocumentId,
   storageError,
@@ -22,11 +29,22 @@ export function JsonDocumentsSidebar({
   onRename,
   onTogglePinned,
   onDelete,
-}: JsonDocumentsSidebarProps) {
+  showShortcutHints,
+}, ref) {
   const [editingDocumentId, setEditingDocumentId] = useState<string | null>(null);
   const [renameDraft, setRenameDraft] = useState('');
   const [isCollapsed, setIsCollapsed] = useState(false);
   const cancelBlurCommitRef = useRef(false);
+
+  useImperativeHandle(ref, () => ({
+    renameActive: () => {
+      const document = documents.find((item) => item.id === activeDocumentId);
+      if (document && !isCollapsed) {
+        setRenameDraft(document.name);
+        setEditingDocumentId(document.id);
+      }
+    },
+  }), [activeDocumentId, documents, isCollapsed]);
 
   const startRename = (document: JsonDocument) => {
     setRenameDraft(document.name);
@@ -50,23 +68,27 @@ export function JsonDocumentsSidebar({
             <button
               type="button"
               onClick={onCreate}
-              className="ml-auto rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-[#292e42] dark:hover:text-zinc-100"
+              className="relative ml-auto rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-[#292e42] dark:hover:text-zinc-100"
               title="Crear documento JSON"
               aria-label="Crear documento JSON"
+              data-json-shortcut={JSON_SHORTCUTS.newDocument.key}
             >
               <FilePlus2 size={16} />
+              <ShortcutHint shortcut={JSON_SHORTCUTS.newDocument.key} visible={showShortcutHints} />
             </button>
           </>
         )}
         <button
           type="button"
           onClick={() => setIsCollapsed((collapsed) => !collapsed)}
-          className={`rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-[#292e42] dark:hover:text-zinc-100 ${isCollapsed ? 'mx-auto' : 'ml-1'}`}
+          className={`relative rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-200 hover:text-zinc-900 dark:hover:bg-[#292e42] dark:hover:text-zinc-100 ${isCollapsed ? 'mx-auto' : 'ml-1'}`}
           title={isCollapsed ? 'Desplegar barra lateral' : 'Contraer barra lateral'}
           aria-label={isCollapsed ? 'Desplegar barra lateral' : 'Contraer barra lateral'}
           aria-expanded={!isCollapsed}
+          data-json-shortcut={JSON_SHORTCUTS.sidebar.key}
         >
           {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          <ShortcutHint shortcut={JSON_SHORTCUTS.sidebar.key} visible={showShortcutHints} />
         </button>
       </div>
 
@@ -106,32 +128,28 @@ export function JsonDocumentsSidebar({
                     <button
                       type="button"
                       onClick={() => onSelect(document.id)}
-                      className="flex min-w-0 flex-1 items-center px-2 py-1.5 text-left text-xs text-zinc-700 dark:text-zinc-200"
+                      onDoubleClick={() => startRename(document)}
+                      className="relative flex min-w-0 flex-1 items-center px-2 py-1.5 text-left text-xs text-zinc-700 dark:text-zinc-200"
                       title="Haz doble clic para cambiar el nombre"
+                      data-json-shortcut={isActive ? JSON_SHORTCUTS.renameDocument.key : undefined}
                     >
-                      <span
-                        className="truncate"
-                        onDoubleClick={(event) => {
-                          event.preventDefault();
-                          event.stopPropagation();
-                          startRename(document);
-                        }}
-                      >
-                        {document.name}
-                      </span>
+                      <span className="truncate">{document.name}</span>
+                      <ShortcutHint shortcut={JSON_SHORTCUTS.renameDocument.key} visible={showShortcutHints && isActive} />
                     </button>
                   )}
                   <button
                     type="button"
                     onClick={() => onTogglePinned(document.id)}
-                    className={`shrink-0 rounded p-1 transition-opacity hover:bg-zinc-200 focus:opacity-100 group-hover:opacity-100 dark:hover:bg-[#414868] ${
-                      document.pinned ? 'text-blue-600 dark:text-blue-400' : 'text-zinc-400 opacity-0 [@media(hover:none)]:opacity-100'
+                    className={`relative shrink-0 rounded p-1 transition-opacity hover:bg-zinc-200 focus:opacity-100 group-hover:opacity-100 dark:hover:bg-[#414868] ${
+                      document.pinned ? 'text-blue-600 dark:text-blue-400' : `text-zinc-400 [@media(hover:none)]:opacity-100 ${showShortcutHints && isActive ? 'opacity-100' : 'opacity-0'}`
                     }`}
                     title={`${document.pinned ? 'Desfijar' : 'Fijar'} ${document.name}`}
                     aria-label={`${document.pinned ? 'Desfijar' : 'Fijar'} ${document.name}`}
                     aria-pressed={!!document.pinned}
+                    data-json-shortcut={isActive && !isEditing ? JSON_SHORTCUTS.pinDocument.key : undefined}
                   >
                     <Pin size={14} fill={document.pinned ? 'currentColor' : 'none'} />
+                    <ShortcutHint shortcut={JSON_SHORTCUTS.pinDocument.key} visible={showShortcutHints && isActive && !isEditing} />
                   </button>
                   <button
                     type="button"
@@ -139,11 +157,13 @@ export function JsonDocumentsSidebar({
                       event.stopPropagation();
                       onDelete(document.id);
                     }}
-                    className="mr-1 rounded p-1 text-zinc-400 opacity-0 transition-opacity hover:bg-red-100 hover:text-red-600 focus:opacity-100 group-hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400"
+                    className={`relative mr-1 rounded p-1 text-zinc-400 transition-opacity hover:bg-red-100 hover:text-red-600 focus:opacity-100 group-hover:opacity-100 dark:hover:bg-red-950 dark:hover:text-red-400 ${showShortcutHints && isActive && !isEditing ? 'opacity-100' : 'opacity-0'}`}
                     title={`Eliminar ${document.name}`}
                     aria-label={`Eliminar ${document.name}`}
+                    data-json-shortcut={isActive && !isEditing ? JSON_SHORTCUTS.deleteDocument.key : undefined}
                   >
                     <Trash2 size={14} />
+                    <ShortcutHint shortcut={JSON_SHORTCUTS.deleteDocument.key} visible={showShortcutHints && isActive && !isEditing} />
                   </button>
                 </li>
               );
@@ -163,4 +183,4 @@ export function JsonDocumentsSidebar({
       )}
     </aside>
   );
-}
+});
